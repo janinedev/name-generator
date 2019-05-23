@@ -1,0 +1,75 @@
+<div nz-row>
+  <div nz-col [nzSpan]="18" [nzPush]="6">
+    <nz-divider nzText="Results" nzOrientation="left"></nz-divider>
+    <div *ngIf="profiles[0]; else noProfile">
+      <div class="card-container">
+        <div nz-row [nzGutter]="8">
+          <div *ngFor="let p of profiles[0]" nz-col [nzSpan]="8">
+            <nz-card>
+              <nz-card-meta nzTitle="{{ p.name }} {{ p.surname }}" [nzAvatar]="avatarTemplate"></nz-card-meta>
+              <p><i nz-icon [nzType]="'phone'" [nzTheme]="'twotone'" [nzTwotoneColor]="'#eb2f96'"></i>{{ p.phone }}</p>
+              <p><i nz-icon [nzType]="'gift'" [nzTheme]="'twotone'"
+                  [nzTwotoneColor]="'#52c41a'"></i>{{ p.birthday.mdy }}
+              </p>
+            </nz-card>
+            <ng-template #avatarTemplate>
+              <nz-avatar nzSrc="{{ p.photo || 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png' }}">
+              </nz-avatar>
+            </ng-template>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <ng-template #noProfile>
+      <nz-empty [nzNotFoundContent]="customNfText"></nz-empty>
+    </ng-template>
+
+    <ng-template #customNfText>
+      <span> No names found. Please use the search form to start seeing names here </span>
+    </ng-template>
+
+  </div>
+
+  <div nz-col [nzSpan]="6" [nzPull]="18">
+    <div class="form-container">
+      <nz-divider nzText="Form" nzOrientation="left"></nz-divider>
+      <form nz-form [formGroup]="namesForm" (ngSubmit)="onSubmit()">
+        <nz-form-item>
+          <nz-form-label>Region</nz-form-label>
+          <nz-form-control [nzSpan]="24">
+            <nz-select [(ngModel)]="selectedRegion" (ngModelChange)="setRegion($event)" name="selectedRegion"
+              nzAllowClear nzPlaceHolder="Select a region" [ngModelOptions]="{standalone: true}">
+              <nz-option *ngFor="let region of regionList" [nzValue]="region" [nzLabel]="region.label"></nz-option>
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+          <nz-form-label>Gender</nz-form-label>
+          <nz-form-control [nzSpan]="24">
+            <nz-select [(ngModel)]="selectedGender" (ngModelChange)="setGender($event)" name="selectedGender"
+              nzAllowClear nzPlaceHolder="Select a gender" [ngModelOptions]="{standalone: true}">
+              <nz-option *ngFor="let gender of genderList" [nzValue]="gender" [nzLabel]="gender.label"></nz-option>
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+          <nz-form-label>Number of Names</nz-form-label>
+          <nz-form-control [nzSpan]="24">
+            <input type="number" formControlName="numRecord" id="'numRecord'" (ngModelChange)="setNumRecords($event)"
+              nz-input />
+            <nz-form-explain *ngIf="namesForm.get('numRecord')?.dirty && namesForm.get('numRecord')?.errors"> You can
+              only retrieve 12 names at a time </nz-form-explain>
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+          <nz-form-control [nzSpan]="24">
+            <button nz-button nzType="primary" nzBlock>Generate Names</button>
+            <button nz-button nzType="default" (click)="clearAll()" nzBlock>Clear</button>
+          </nz-form-control>
+        </nz-form-item>
+      </form>
+    </div>
+  </div>
+
+</div>
