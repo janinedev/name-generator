@@ -55,7 +55,7 @@
               nzPlaceHolder="Select a gender">
               <nz-option *ngFor="let gender of genderList" [nzValue]="gender" [nzLabel]="gender.label"></nz-option>
             </nz-select>
-            <nz-form-explain *ngIf="namesForm.get('regionSelected')?.dirty && namesForm.get('regionSelected')?.errors">
+            <nz-form-explain *ngIf="namesForm.get('genderSelected')?.dirty && namesForm.get('genderSelected')?.errors">
               Please select a gender </nz-form-explain>
           </nz-form-control>
         </nz-form-item>
