@@ -35,39 +35,47 @@
     <div class="form-container">
       <nz-divider nzText="Form" nzOrientation="left"></nz-divider>
       <form nz-form [formGroup]="namesForm" (ngSubmit)="onSubmit()">
+
         <nz-form-item>
           <nz-form-label>Region</nz-form-label>
           <nz-form-control [nzSpan]="24">
-            <nz-select [(ngModel)]="selectedRegion" (ngModelChange)="setRegion($event)" name="selectedRegion"
-              nzAllowClear nzPlaceHolder="Select a region" [ngModelOptions]="{standalone: true}">
+            <nz-select formControlName="regionSelected" id="'regionSelected'" nzAllowClear
+              nzPlaceHolder="Select a region">
               <nz-option *ngFor="let region of regionList" [nzValue]="region" [nzLabel]="region.label"></nz-option>
             </nz-select>
+            <nz-form-explain *ngIf="namesForm.get('regionSelected')?.dirty && namesForm.get('regionSelected')?.errors">
+              Please select a region </nz-form-explain>
           </nz-form-control>
         </nz-form-item>
+
         <nz-form-item>
           <nz-form-label>Gender</nz-form-label>
           <nz-form-control [nzSpan]="24">
-            <nz-select [(ngModel)]="selectedGender" (ngModelChange)="setGender($event)" name="selectedGender"
-              nzAllowClear nzPlaceHolder="Select a gender" [ngModelOptions]="{standalone: true}">
+            <nz-select formControlName="genderSelected" id="'genderSelected'" nzAllowClear
+              nzPlaceHolder="Select a gender">
               <nz-option *ngFor="let gender of genderList" [nzValue]="gender" [nzLabel]="gender.label"></nz-option>
             </nz-select>
+            <nz-form-explain *ngIf="namesForm.get('regionSelected')?.dirty && namesForm.get('regionSelected')?.errors">
+              Please select a gender </nz-form-explain>
           </nz-form-control>
         </nz-form-item>
+
         <nz-form-item>
           <nz-form-label>Number of Names</nz-form-label>
           <nz-form-control [nzSpan]="24">
-            <input type="number" formControlName="numRecord" id="'numRecord'" (ngModelChange)="setNumRecords($event)"
-              nz-input />
+            <input type="number" formControlName="numRecord" id="'numRecord'" nz-input />
             <nz-form-explain *ngIf="namesForm.get('numRecord')?.dirty && namesForm.get('numRecord')?.errors"> You can
               only retrieve 12 names at a time </nz-form-explain>
           </nz-form-control>
         </nz-form-item>
+
         <nz-form-item>
           <nz-form-control [nzSpan]="24">
             <button nz-button nzType="primary" nzBlock>Generate Names</button>
             <button nz-button nzType="default" (click)="clearAll()" nzBlock>Clear</button>
           </nz-form-control>
         </nz-form-item>
+
       </form>
     </div>
   </div>

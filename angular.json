@@ -33,7 +33,7 @@
             ],
             "styles": [
               "src/styles.less",
-              "src/assets/theme.less"
+              "src/theme.less"
             ],
             "scripts": [],
             "es5BrowserSupport": true

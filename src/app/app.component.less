@@ -1,12 +1,16 @@
+@import '../theme.less';
+
+@zindex-fixed-header : 100;
+
 nz-header {
-    height: 70px;
+    height: @layout-header-height;
     position: fixed;
     width: 100%;
-    z-index: 100;
+    z-index: @zindex-fixed-header;
 }
 
 .header {
-    color: #fff;
+    color: @text-color-dark;
     text-align: center;
 }
 
@@ -15,7 +19,7 @@ nz-sider {
 }
 
 nz-content {
-    padding: 0 50px;
+    padding: @layout-header-padding;
     margin-top: 34px;
     min-height: 768px;
 }

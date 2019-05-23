@@ -2,7 +2,7 @@ import { ProfileService } from '../data/services/profile.service';
 import { Component, OnInit } from '@angular/core';
 import { IProfile } from '../data/models/profile.model';
 import { REGIONS } from '../data/constants/regions';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
 
 @Component({
   selector: 'app-main',
@@ -12,17 +12,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 export class MainComponent implements OnInit {
 
   regionList = [{ label: '', value: '' }];
-  regionSelected = { label: '', value: '' };
-
-  regionListAlt: any;
-
   genderList = [{ label: 'Male', value: 'male' }, { label: 'Female', value: 'female' }];
-  genderSelected = { label: '', value: '' };
-
-  selectedRegion = 'albania';
-  selectedGender = 'male';
-  numRecord = 1;
-  recordsNeeded = 1;
 
   criteria = {
     region: "",
@@ -32,52 +22,21 @@ export class MainComponent implements OnInit {
 
   profiles: IProfile[] = [];
   namesForm: FormGroup;
-
   numRecordIsInvalid = true;
-
 
   constructor(private fb: FormBuilder,
     private profileService: ProfileService) {
 
-
+    this.mapRegions();
   }
 
   ngOnInit(): void {
 
     this.namesForm = this.fb.group({
+      regionSelected: [null],
+      genderSelected: [null],
       numRecord: [null, [Validators.min(1), Validators.max(12)]],
     });
-
-    this.mapRegions();
-  }
-
-  private mapRegions(): void {
-    REGIONS.forEach(region => {
-      this.regionList.push({
-        label: region.name,
-        value: region.name.toLowerCase().trim()
-      });
-    });
-  }
-
-  setRegion(r: { label: string; value: string; }): void {
-    this.selectedRegion = r.value;
-  }
-
-  setGender(g: { label: string; value: string; }): void {
-    this.selectedGender = g.value;
-  }
-
-  setNumRecords(n: number): void {
-
-    this.namesForm.patchValue({
-      numRecord: n
-    });
-
-    this.namesForm = this.fb.group({
-      numRecord: [null, [Validators.min(1), Validators.max(12)]],
-    });
-    this.recordsNeeded = n;
   }
 
   loadNamesByCriteria(criteria: any): void {
@@ -90,20 +49,44 @@ export class MainComponent implements OnInit {
     }, error => {
       this.profiles = [];
     });
-
-    this.namesForm.reset();
   }
 
   onSubmit(): void {
-
-    if (this.namesForm.valid) {
-      this.criteria = {
-        region: this.selectedRegion,
-        gender: this.selectedGender,
-        amt: this.recordsNeeded
-      }
-      this.loadNamesByCriteria(this.criteria);
+    this.criteria = {
+      region: this.region.value,
+      gender: this.gender.value,
+      amt: this.records.value
     }
+    this.loadNamesByCriteria(this.criteria);
+  }
+
+  ngOnChanges(n: any): void {
+    this.namesForm = this.fb.group({
+      regionSelected: [null],
+      genderSelected: [null],
+      numRecord: [null, [Validators.min(1), Validators.max(12)]],
+    });
+  }
+
+  private mapRegions(): void {
+    REGIONS.forEach(region => {
+      this.regionList.push({
+        label: region.name,
+        value: region.name.toLowerCase().trim()
+      });
+    });
+  }
+
+  get region(): AbstractControl { // name property
+    return this.namesForm.get('regionSelected').value
+  }
+
+  get gender(): AbstractControl { // name property
+    return this.namesForm.get('genderSelected').value
+  }
+
+  get records(): AbstractControl { // name property
+    return this.namesForm.get('numRecord')
   }
 
   clearAll(): void {
@@ -113,10 +96,7 @@ export class MainComponent implements OnInit {
       amt: 0
     }
 
-    this.selectedRegion = '';
-    this.selectedGender = '';
-    this.numRecord = 0;
-
     this.profiles = [];
+    this.namesForm.reset();
   }
 }
