@@ -1,3 +1,6 @@
+# Demo
+Try out the Name Generator app here https://janinedev.github.io/name-generator/
+
 # NameGeneratorApp
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 7.3.9.
